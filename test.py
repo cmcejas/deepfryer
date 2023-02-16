@@ -37,14 +37,23 @@ def display_image(image):
     # convert the image to Tkinter format
     image = ImageTk.PhotoImage(image)
 
-    # display the image in the label widget
-    label = tk.Label(root, image=image)
-    label.image = image
-    label.pack()
+    # create a canvas with a scrollbar
+    canvas = tk.Canvas(root, width=500, height=500)
+    canvas.pack(side="left", fill="both", expand=True)
+
+    scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
+    scrollbar.pack(side="right", fill="y")
+
+    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+    # display the image in the canvas
+    canvas_image = canvas.create_image(0, 0, anchor="nw", image=image)
+    canvas.config(scrollregion=canvas.bbox("all"))
 
     # add a button to save the image
-    save_button = tk.Button(root, text="Download", command=lambda: save_image(image))
-    save_button.pack()
+    save_button = tk.Button(canvas, text="Save", command=lambda: save_image(image))
+    canvas.create_window(10, 10, anchor="nw", window=save_button)
 
 # function to save the given image
 def save_image(image):
@@ -54,8 +63,8 @@ def save_image(image):
         return
 
     # save the image using PIL
-    image = image._PhotoImage__photo.subsample(2)
-    image.write(path)
+    image.save(path)
+
 
 # create the root window
 root = tk.Tk()
