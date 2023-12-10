@@ -1,5 +1,6 @@
 from tkinter import filedialog, Tk, Canvas, Button, Scrollbar, BOTH
 from PIL import Image, ImageTk, ImageEnhance
+import customtkinter
 
 # global variables to store the original image, the Tkinter image, and the select button
 original_image = None
@@ -64,7 +65,7 @@ def display_image(image):
     canvas.config(scrollregion=canvas.bbox("all"))
 
     # add a button to save the image
-    save_button = Button(canvas, text="Download", command=save_image)
+    save_button = customtkinter.CTkButton(canvas, text="Download", command=save_image)
     canvas.create_window(10, 10, anchor="nw", window=save_button)
 
     # adds a scrollbar
@@ -83,26 +84,28 @@ def save_image():
     # save the image using PIL
     original_image.save(path)
 
+customtkinter.set_appearance_mode("dark")
+
 # create the root window
-root = Tk()
+root = customtkinter.CTk()
 
 # set the size of the window to 800x500 pixels
 root.geometry("800x500")
 
 # create a canvas to display the image
-canvas = Canvas(root)
+canvas = Canvas(root, bg='#242424', highlightthickness=0)
 canvas.pack(side="left", fill="both", expand=True)
 
 # creates image scrollbar
-scrollbar = Scrollbar(root, command=canvas.yview)
+scrollbar = customtkinter.CTkScrollbar(root, command=canvas.yview)
 scrollbar.pack(side="right", fill="y")
 
 # configure the canvas to scroll with the scrollbar
 canvas.config(yscrollcommand=scrollbar.set)
 
 # add a button to select an image
-select_button = Button(root, text="Select Image", command=select_image)
-select_button.place(x=1, y=1)
+select_button = customtkinter.CTkButton(root, text="Select Image", command=select_image)
+select_button.place(relx=0.5, rely=0.5, anchor="center")
 
 # start the Tkinter main loop
 root.mainloop()
