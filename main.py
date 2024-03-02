@@ -88,6 +88,7 @@ customtkinter.set_appearance_mode("dark")
 
 # create the root window
 root = customtkinter.CTk()
+root.title('Deep Fryer')
 
 # set the size of the window to 800x500 pixels
 root.geometry("800x500")
